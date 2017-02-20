@@ -3,5 +3,5 @@
   "host": "localhost",
   "hostaddr": "127.0.0.1",
   "port": 5432,
-  "user": "event_source"
+  "user": "anderson"
 }
