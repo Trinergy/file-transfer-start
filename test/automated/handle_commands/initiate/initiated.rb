@@ -35,7 +35,7 @@ context 'handle command' do
   			test 'File temp_path set' do
 				assert(initiated.temp_path == initiate.temp_path)
 			end
-			
+
 			test 'File time set' do
 				assert(initiated.time == initiate.time)
 			end
@@ -49,9 +49,6 @@ context 'handle command' do
 					refute(val.nil?)
 				end
 			end
-
 		end
-
-
 	end
 end
