@@ -10,4 +10,9 @@ require 'file_transfer_component/controls'
 
 require 'pp'
 
+require_relative 'fixtures/attribute_equality'
+require_relative 'fixtures/attribute_assignment'
+require_relative 'fixtures/handler'
+require_relative 'fixtures/projection'
+
 include FileTransferComponent

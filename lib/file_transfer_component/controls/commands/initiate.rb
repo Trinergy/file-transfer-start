@@ -8,7 +8,7 @@ module FileTransferComponent
 
           initiate.file_id = ID.example
           initiate.name = "some_name"
-          initiate.temp_path = "some_temp_path"
+          initiate.uri = "some_uri"
           initiate.time = Controls::Time.example
 
           initiate

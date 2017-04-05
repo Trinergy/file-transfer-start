@@ -1,14 +1,15 @@
 module FileTransferComponent
   module Messages
     module Events
-      class Initiated
+      class CopiedToS3
         include Messaging::Message
 
         attribute :file_id, String
-        attribute :name, String
-        attribute :uri, String
-        attribute :time, String
+        attribute :key, String
+        attribute :bucket, String
+        attribute :region, String
         attribute :processed_time, String
+
       end
     end
   end
