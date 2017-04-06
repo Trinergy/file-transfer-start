@@ -2,7 +2,7 @@ require_relative '../../automated_init'
 
 context "Handle Events" do
   context "Accept event" do
-    handler = Handlers::Events::Initiated.build
+    handler = FileTransferComponent::Handlers::Events::Initiated.build
     SubstAttr::Substitute.(:write, handler)
     SubstAttr::Substitute.(:store, handler)
     SubstAttr::Substitute.(:clock, handler)

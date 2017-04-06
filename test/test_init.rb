@@ -8,6 +8,7 @@ require 'test_bench'; TestBench.activate
 
 require 'file_transfer_component/controls'
 
+
 require 'pp'
 
 require_relative 'fixtures/attribute_equality'
