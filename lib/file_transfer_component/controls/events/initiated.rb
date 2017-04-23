@@ -8,7 +8,7 @@ module FileTransferComponent
 
           initiated.file_id = ID.example
           initiated.name = "some_name"
-          initiated.uri= "some_uri"
+          initiated.temp_path = ::File.absolute_path("../buffer/file_01.txt")
           initiated.time = Controls::Time::Effective.example
           initiated.processed_time = Controls::Time::Processed.example
 

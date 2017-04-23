@@ -14,14 +14,13 @@ module FileTransferComponent
         dependency :write, Messaging::Postgres::Write
         dependency :store, FileTransferComponent::Store
         dependency :clock, Clock::UTC
-        dependency :remote_storage, FileTransferComponent::FileStorage::Remote # ::S3
+        dependency :cloud_store, CloudStore # ::S3
 
         def configure
           Messaging::Postgres::Write.configure self
           FileTransferComponent::Store.configure self
-          FileTransferComponent::FileStorage::Remote.configure self
+          CloudStore.configure self
           Clock::UTC.configure self
-          Settings.instance.set self
         end
 
         category :file_transfer
@@ -36,29 +35,14 @@ module FileTransferComponent
 
           file, stream_version = store.get(file_id, include: :version)
 
-          if file.stored_permanently?
-            logger.debug "#{initiated} command was ignored. File transfer #{file_id} was transfered to permanent storage on #{file.permanent_storage_time}."
-            return
-          end
-
-          if file.not_found?
-            logger.debug "#{initiated} command was ignored. File transfer #{file_id} can not be found."
-            return
-          end
+          # unless file.cloud_uri.nil?
+          #   logger.debug "#{initiated} event was ignored. File transfer #{file_id} has already been published"
+          # end
 
           key = "#{file.id}-#{initiated.name}"
 
-          begin
-            remote_storage.put(initiated.uri, region, bucket, key)
-          rescue FileTransferComponent::FileStorage::Remote::LocalFileNotFound
-            time = clock.iso8601
-            file_missing = NotFound.follow(initiated)
-            file_missing.processed_time = time
+          cloud_store.upload(initiated.uri, region, bucket, key)
 
-            stream_name = stream_name(file_id)
-            write.(file_missing, stream_name, expected_version: stream_version)
-            return
-          end
 
           time = clock.iso8601
 

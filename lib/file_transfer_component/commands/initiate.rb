@@ -31,7 +31,7 @@ module FileTransferComponent
         Messages::Commands::Initiate.build(
           file_id: file_id,
           name: name,
-          uri: uri,
+          temp_path: uri,
           time: clock.iso8601
         )
       end

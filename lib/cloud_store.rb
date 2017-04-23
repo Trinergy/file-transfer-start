@@ -1,13 +1,20 @@
-class CloudStore
-  class Error < RuntimeError; end
+require 'fileutils'
 
+class CloudStore
   def self.included(cls)
     cls.extend Configure
   end
 
   def upload(file)
-    # Call to AWS
-    return [true, {address: "https://aws_s3/bucket_id/${file.path}"}] #[false, {error: "invalid file type"}]
+
+    destination = ::File.absolute_path("tmp/files/#{DateTime.now.strftime('%Y%m%d%H%M%S%L')}-#{::File.basename(file)}")
+
+    begin
+      FileUtils.cp file, destination
+      return [true, {address: destination}]
+    rescue => error
+      return [false, {error: error.message}]
+    end
   end
 
 
