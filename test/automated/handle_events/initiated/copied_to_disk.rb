@@ -1,11 +1,12 @@
 require_relative '../../automated_init'
 
 context "Handle Events" do
-  context "File Not Found" do
+  context "Accept event" do
     handler = FileTransferComponent::Handlers::Events::Initiated.build
     SubstAttr::Substitute.(:write, handler)
     SubstAttr::Substitute.(:store, handler)
     SubstAttr::Substitute.(:clock, handler)
+    # SubstAttr::Substitute.(:cloud_store, handler)
 
     fixture = Fixtures::Handler.build(
       handler: handler,
@@ -13,22 +14,14 @@ context "Handle Events" do
       entity: Controls::File::Initiated.example
     )
 
-
-    remote_storage = FileTransferComponent::FileStorage::Remote::Substitute.new
-    remote_storage.not_found = true;
-
-    fixture.handler.remote_storage = remote_storage
-
-    fixture.(output: "NotFound") do |test|
+    fixture.(output: "CopiedToDisk") do |test|
 
       test.assert_accepted
 
       test.assert_attributes_assigned([
         :file_id,
-        :name,
-        :uri,
-        :time,
-        :processed_time
+        :file_path,
+        :processed_time,
       ])
     end
   end

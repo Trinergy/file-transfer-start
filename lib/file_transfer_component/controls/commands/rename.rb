@@ -1,13 +1,13 @@
 module FileTransferComponent
   module Controls
     module Commands
-      module Initiate
+      module Rename
         def self.example
 
-          initiate = FileTransferComponent::Messages::Commands::Initiate.build
+          initiate = FileTransferComponent::Messages::Commands::Rename.build
+
           initiate.file_id = ID.example
-          initiate.name = "some_name"
-          initiate.temp_path = "some_file_path"
+          initiate.name = "new_name_for_rename"
           initiate.time = Controls::Time.example
 
           initiate

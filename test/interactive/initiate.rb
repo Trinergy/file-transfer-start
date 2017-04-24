@@ -9,5 +9,3 @@ uri ||= FileTransferComponent::Controls::URI.file
 file_id = Client::Initiate.(name, uri)
 
 puts file_id
-
-

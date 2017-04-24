@@ -16,7 +16,7 @@ module FileTransferComponent
         "some_file_name"
       end
 
-      def self.uri
+      def self.path
         "/path/to/some_file"
       end
 

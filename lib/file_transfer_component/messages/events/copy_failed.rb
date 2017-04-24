@@ -1,13 +1,11 @@
 module FileTransferComponent
   module Messages
     module Events
-      class NotFound
+      class CopyFailed
         include Messaging::Message
 
         attribute :file_id, String
-        attribute :name, String
-        attribute :uri, String
-        attribute :time, String
+        attribute :error_message, String
         attribute :processed_time, String
       end
     end

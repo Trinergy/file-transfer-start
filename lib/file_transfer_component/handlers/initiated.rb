@@ -8,20 +8,17 @@ module FileTransferComponent
         include FileTransferComponent::Messages::Events
         include Log::Dependency
 
-        setting :region
-        setting :bucket
-
         dependency :write, Messaging::Postgres::Write
         dependency :store, FileTransferComponent::Store
         dependency :clock, Clock::UTC
-        dependency :remote_storage, FileTransferComponent::FileStorage::Remote # ::S3
+        dependency :cloud_store, CloudStore #local_storage at the moment
 
         def configure
           Messaging::Postgres::Write.configure self
           FileTransferComponent::Store.configure self
-          FileTransferComponent::FileStorage::Remote.configure self
+          CloudStore.configure self
           Clock::UTC.configure self
-          Settings.instance.set self
+          # Settings.instance.set self
         end
 
         category :file_transfer
@@ -41,39 +38,35 @@ module FileTransferComponent
             return
           end
 
-          if file.not_found?
-            logger.debug "#{initiated} command was ignored. File transfer #{file_id} can not be found."
-            return
-          end
-
           key = "#{file.id}-#{initiated.name}"
 
-          begin
-            remote_storage.put(initiated.uri, region, bucket, key)
-          rescue FileTransferComponent::FileStorage::Remote::LocalFileNotFound
-            time = clock.iso8601
-            file_missing = NotFound.follow(initiated)
-            file_missing.processed_time = time
-
-            stream_name = stream_name(file_id)
-            write.(file_missing, stream_name, expected_version: stream_version)
-            return
-          end
-
+          ok, meta = cloud_store.upload(initiated.temp_path)
           time = clock.iso8601
-
-          copied = CopiedToS3.follow(initiated, include: [:file_id])
-          copied.processed_time = time
-
-          copied.key = key
-          copied.bucket = bucket
-          copied.region = region
-
           stream_name = stream_name(file_id)
-          write.(copied, stream_name, expected_version: stream_version)
 
-          logger.info { "File copied" }
-          logger.info(tag: :verbose) { copied.pretty_inspect }
+          if ok
+            copied_to_disk = CopiedToDisk.follow(initiated, include: [:file_id])
+
+            copied_to_disk.file_path = meta[:address]
+
+            copied_to_disk.processed_time = time
+
+            write.(copied_to_disk, stream_name, expected_version: stream_version)
+
+            logger.info { "File copied" }
+            logger.info(tag: :verbose) { copied_to_disk.pretty_inspect }
+          else
+            copy_failed = CopyFailed.follow(initiated, include: [:file_id])
+
+            copy_failed.error_message = meta[:error]
+
+            copy_failed.processed_time = time
+
+            write.(copy_failed, stream_name, expected_version: stream_version)
+
+            logger.info { "File copy failed" }
+            logger.info(tag: :verbose) { copy_failed.pretty_inspect }
+          end
         end
       end
     end

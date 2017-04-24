@@ -15,7 +15,7 @@ context "Handle Commands" do
       test.assert_attributes_copied([
         :file_id,
         :name,
-        :uri,
+        :temp_path,
         :time
       ])
     end

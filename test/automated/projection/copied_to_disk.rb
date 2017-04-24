@@ -4,11 +4,14 @@ context "File Projection" do
   fixture = Fixtures::Projection.build(
     projection: Projection,
     entity: Controls::File::Initiated.example,
-    event: Controls::Events::NotFound.example
+    event: Controls::Events::CopiedToDisk.example
   )
 
   fixture.() do |test|
-    test.assert_time_converted_and_copied(:processed_time, :not_found_time)
-    #TODO assset for not found
+    test.assert_attributes_copied([
+      {file_id: :id},
+      {file_path: :path},
+    ])
+    #TODO Assert for stored_pemanently?
   end
 end
