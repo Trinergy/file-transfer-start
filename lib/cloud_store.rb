@@ -9,7 +9,7 @@ class CloudStore
     destination = ::File.absolute_path("tmp/files/#{DateTime.now.strftime('%Y%m%d%H%M%S%L')}-#{::File.basename(file)}")
 
     begin
-      FileUtils.cp file, destination
+      ::FileUtils.cp file, destination
       return [true, {address: destination}]
     rescue => error
       return [false, {error: error.message}]

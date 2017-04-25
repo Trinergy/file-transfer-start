@@ -7,6 +7,7 @@ module FileTransferComponent
     attribute :path, String
     attribute :initiated_time, Time
     attribute :permanent_storage_time, Time
+    attribute :last_updated_time, Time
 
     def stored_permanently?
       !permanent_storage_time.nil?

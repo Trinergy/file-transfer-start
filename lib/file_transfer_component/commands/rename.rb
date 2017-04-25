@@ -3,7 +3,7 @@ module FileTransferComponent
     class Rename
       include Command
 
-      initializer :name
+      initializer :file_id, :name
 
       def self.build(file_id:, name:, reply_stream_name: nil)
         instance = new(file_id, name)
@@ -13,7 +13,7 @@ module FileTransferComponent
       end
 
       def self.call(file_id:, name:, reply_stream_name: nil)
-        instance = build(file_id:, name:, reply_stream_name: reply_stream_name)
+        instance = build(file_id: file_id, name: name, reply_stream_name: reply_stream_name)
         instance.()
       end
 
