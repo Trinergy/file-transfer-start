@@ -1,5 +1,7 @@
 require_relative '../automated_init'
-
+#TODO Change tests in order to accommodate consumer gem?
+# Consumer is not working if there is Class Initiated
+# Need consumer for interactive testing for rename
 context "File Projection" do
   fixture = Fixtures::Projection.build(
     projection: Projection,
