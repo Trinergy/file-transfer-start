@@ -3,7 +3,8 @@ module FileTransferComponent
     class Command
       include Consumer::Postgres
 
-      handler Handlers::Commands
+      handler Handlers::Commands::Initiate
+      handler Handlers::Commands::Rename
 
       # Errors are handled by this method. If omitted, the default action when an
       # error is raised during the dispatching of a message is to re-raise the error

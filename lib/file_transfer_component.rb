@@ -1,6 +1,6 @@
 #TODO rename to FileTransferComponent
 
-require 'cloud_store'
+require 'file_transfer_component/file_storage/cloud_store'
 
 require 'pp'
 

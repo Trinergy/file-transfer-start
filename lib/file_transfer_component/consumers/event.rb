@@ -3,7 +3,7 @@ module FileTransferComponent
     class Event
       include Consumer::Postgres
 
-      handler Handlers::Events
+      handler Handlers::Events::Initiated
 
       # Errors are handled by this method. If omitted, the default action when an
       # error is raised during the dispatching of a message is to re-raise the error

@@ -10,11 +10,7 @@ name ||= ::File.basename(local_file_path)
 
 file_id = Client::Initiate.(name, local_file_path)
 
-# command_handler = FileTransferComponent::Handlers::Commands.build
 
-# EventSource::Postgres::Read.("fileTransfer:command") do |event_data|
-#   command_handler.(event_data)
-# end
 
 start_time = Time.now
 elapsed_time = 0
