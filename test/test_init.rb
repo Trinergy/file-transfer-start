@@ -10,6 +10,7 @@ require 'file_transfer_component/controls'
 
 
 require 'pp'
+require 'fileutils'
 
 require_relative 'fixtures/attribute_equality'
 require_relative 'fixtures/attribute_assignment'

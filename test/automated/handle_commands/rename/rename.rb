@@ -3,12 +3,12 @@ require_relative '../../automated_init'
 context "Handle Commands" do
   context "Accept command" do
     fixture = Fixtures::Handler.build(
-      handler: Handlers::Commands::Initiate.new,
-      input_message: Controls::Commands::Initiate.example,
+      handler: Handlers::Commands::Rename.new,
+      input_message: Controls::Commands::Rename.example,
       record_new_entity: false
     )
 
-    fixture.(output: "Initiated") do |test|
+    fixture.(output: "Renamed") do |test|
 
       test.assert_accepted
 
